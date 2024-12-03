@@ -38,7 +38,7 @@ export default function Home() {
         style={styles.header}
       >
         <LinearGradient
-          colors={['rgba(0,77,64,0.9)', 'rgba(0,77,64,0.95)'] as const}
+          colors={['rgba(0,77,64,0.8)', 'rgba(0,77,64,0.95)'] as const}
           style={styles.headerOverlay}
         >
           <Text style={styles.title}>Hadist Lengkap</Text>
