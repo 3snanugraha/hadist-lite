@@ -1,74 +1,168 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ImageBackground, Dimensions } from 'react-native';
+import { useRouter } from 'expo-router';
+import { MaterialIcons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+export default function Home() {
+  const router = useRouter();
+  const { width } = Dimensions.get('window');
 
-export default function HomeScreen() {
+  const menuItems = [
+    {
+      title: 'Hadits Arbain',
+      description: 'Kumpulan 42 hadits pilihan Imam Nawawi',
+      icon: 'collections-bookmark',
+      route: '/arbain',
+      gradient: ['#00796B', '#004D40'] as const
+    },
+    {
+      title: 'Bulughul Maram',
+      description: 'Kumpulan hadits hukum dari Ibnu Hajar',
+      icon: 'book',
+      route: '/bulughul',
+      gradient: ['#00695C', '#004D40'] as const
+    },
+    {
+      title: '9 Perawi Hadits',
+      description: 'Kumpulan hadits dari 9 perawi utama',
+      icon: 'people',
+      route: '/perawi',
+      gradient: ['#00897B', '#004D40'] as const
+    }
+  ];
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+    <ScrollView style={styles.container}>
+      <ImageBackground 
+        source={require('@/assets/images/background.png')}
+        style={styles.header}
+      >
+        <LinearGradient
+          colors={['rgba(0,77,64,0.9)', 'rgba(0,77,64,0.95)'] as const}
+          style={styles.headerOverlay}
+        >
+          <Text style={styles.title}>Hadist Lengkap</Text>
+          <Text style={styles.subtitle}>Kumpulan Hadits Pilihan</Text>
+          
+          <View style={styles.statsContainer}>
+            <View style={styles.statItem}>
+              <Text style={styles.statNumber}>42</Text>
+              <Text style={styles.statLabel}>Arbain</Text>
+            </View>
+            <View style={styles.statItem}>
+              <Text style={styles.statNumber}>1596</Text>
+              <Text style={styles.statLabel}>Bulughul</Text>
+            </View>
+            <View style={styles.statItem}>
+              <Text style={styles.statNumber}>9</Text>
+              <Text style={styles.statLabel}>Perawi</Text>
+            </View>
+          </View>
+        </LinearGradient>
+      </ImageBackground>
+
+      <View style={styles.menuContainer}>
+        {menuItems.map((item, index) => (
+          <TouchableOpacity
+            key={index}
+            style={[styles.menuItem, { width: width - 32 }]}
+            onPress={() => router.push(item.route as any)}
+          >
+            <LinearGradient
+              colors={item.gradient}
+              style={styles.menuGradient}
+            >
+              <MaterialIcons name={item.icon as any} size={40} color="#fff" />
+              <View style={styles.menuContent}>
+                <Text style={styles.menuTitle}>{item.title}</Text>
+                <Text style={styles.menuDescription}>{item.description}</Text>
+              </View>
+              <MaterialIcons name="chevron-right" size={30} color="#fff" />
+            </LinearGradient>
+          </TouchableOpacity>
+        ))}
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
+  container: {
+    flex: 1,
+    backgroundColor: '#f5f5f5',
+  },
+  header: {
+    height: 280,
+  },
+  headerOverlay: {
+    padding: 20,
+    height: '100%',
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#fff',
+    marginTop: 20,
+  },
+  subtitle: {
+    fontSize: 18,
+    color: '#fff',
+    opacity: 0.9,
+    marginTop: 5,
+  },
+  statsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginTop: 30,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderRadius: 15,
+    padding: 15,
+  },
+  statItem: {
+    alignItems: 'center',
+  },
+  statNumber: {
+    color: '#fff',
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  statLabel: {
+    color: '#fff',
+    opacity: 0.9,
+    marginTop: 5,
+  },
+  menuContainer: {
+    padding: 16,
+    alignItems: 'center',
+  },
+  menuItem: {
+    marginBottom: 16,
+    borderRadius: 15,
+    overflow: 'hidden',
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  menuGradient: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    padding: 20,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  menuContent: {
+    flex: 1,
+    marginLeft: 15,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  menuTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  menuDescription: {
+    fontSize: 14,
+    color: '#fff',
+    opacity: 0.9,
+    marginTop: 4,
   },
 });
