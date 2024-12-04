@@ -14,37 +14,47 @@ export const useAds = () => {
 
   useEffect(() => {
     if (config?.ads.enabled) {
-      mobileAds().initialize();
+      // console.log('Initializing mobile ads');
+      mobileAds()
+        .initialize()
+        // .then(() => console.log('Mobile ads initialized'));
     }
   }, [config]);
+  
 
   const loadInterstitial = async () => {
     if (!config?.ads.enabled || !config?.ads.units.interstitial.enabled) return;
-
+  
     const adUnitId = config.ads.testMode 
       ? TestIds.INTERSTITIAL 
       : config.ads.units.interstitial.id;
-
+  
     const interstitial = InterstitialAd.createForAdRequest(adUnitId);
     setInterstitialAd(interstitial);
-
+  
     return new Promise((resolve) => {
-      interstitial.load();
       interstitial.addAdEventListener(AdEventType.LOADED, () => {
         resolve(true);
       });
+      interstitial.load();
     });
   };
 
   const showInterstitial = async () => {
-    if (!config?.ads.enabled || !config?.ads.units.interstitial.enabled) return;
-
+    // console.log('Showing interstitial, count:', interstitialCount);
+    if (!config?.ads.enabled || !config?.ads.units.interstitial.enabled) {
+      // console.log('Ads disabled or not configured');
+      return;
+    }
+  
     setInterstitialCount(prev => prev + 1);
-    
+      
     if (interstitialCount % (config.ads.units.interstitial.frequency || 3) === 0) {
       try {
+        // console.log('Loading interstitial');
         await loadInterstitial();
         if (interstitialAd) {
+          // console.log('Showing interstitial ad');
           await interstitialAd.show();
         }
       } catch (error) {
@@ -52,6 +62,7 @@ export const useAds = () => {
       }
     }
   };
+  
 
   const getBannerAdId = () => {
     if (!config?.ads.enabled || !config?.ads.units.banner.enabled) return null;

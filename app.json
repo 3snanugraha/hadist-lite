@@ -15,8 +15,11 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/logo.png",
-        "backgroundColor": "#004D40"
-      }
+        "backgroundColor": "#004D40",
+        "enableProguardInReleaseBuilds": true,
+        "enableShrinkResources": true
+      },
+      "package": "com.artadev.haditslengkap"
     },
     "web": {
       "bundler": "metro",
@@ -34,15 +37,24 @@
           "backgroundColor": "#004D40"
         }
       ],
-      "react-native-google-mobile-ads",
-      {
-        "android": {
-          "appId": "ca-app-pub-2147056952925982~1278312328"
+      [
+        "react-native-google-mobile-ads",
+        {
+          "androidAppId": "ca-app-pub-2147056952925982~1278312328",
+          "iosAppId": "ca-app-pub-2147056952925982~1278312328"
         }
-      }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "eb2d02cb-3161-4089-adff-a90903ed0c34"
+      }
     }
   }
 }

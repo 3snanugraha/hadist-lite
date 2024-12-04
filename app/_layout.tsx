@@ -1,6 +1,6 @@
 import { Stack } from 'expo-router';
 import { useEffect } from 'react';
-import { AppOpenAd, TestIds } from 'react-native-google-mobile-ads';
+import { AppOpenAd, TestIds, AdEventType } from 'react-native-google-mobile-ads';
 import { useAds } from '../hooks/useAds';
 
 export default function RootLayout() {
@@ -16,8 +16,13 @@ export default function RootLayout() {
     const appOpenAd = AppOpenAd.createForAdRequest(appOpenId);
     
     const loadAndShowAd = async () => {
-      await appOpenAd.load();
-      await appOpenAd.show();
+      return new Promise((resolve) => {
+        appOpenAd.addAdEventListener(AdEventType.LOADED, () => {
+          appOpenAd.show();
+          resolve(true);
+        });
+        appOpenAd.load();
+      });
     };
 
     loadAndShowAd();
@@ -38,9 +43,25 @@ export default function RootLayout() {
         options={{ headerShown: false }} 
       />
       <Stack.Screen 
-        name="detail-hadist/[id]" 
+        name="detail-hadist-arbain/[id]" 
         options={{
-          title: 'Detail Hadist',
+          title: 'Detail Hadist Arbain',
+          headerStyle: {
+            backgroundColor: '#004D40',
+          },
+          headerTintColor: '#fff',
+          headerShown: false,
+        }}
+        listeners={{
+          beforeRemove: () => {
+            showInterstitial();
+          },
+        }}
+      />
+      <Stack.Screen 
+        name="detail-hadist-bm/[id]" 
+        options={{
+          title: 'Detail Hadist Bulughul Maram',
           headerStyle: {
             backgroundColor: '#004D40',
           },

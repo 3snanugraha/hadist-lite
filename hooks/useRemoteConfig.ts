@@ -49,13 +49,13 @@ export const useRemoteConfig = () => {
     try {
       const response = await fetch('https://gist.githubusercontent.com/3snanugraha/b3c85a9eb5f276b58efacb1f6e37695a/raw');
       const data = await response.json();
+      // console.log('Config loaded:', data);
       setConfig(data);
     } catch (error) {
       console.error('Error fetching remote config:', error);
-    } finally {
-      setLoading(false);
     }
   };
+  
 
   return { config, loading };
 };
