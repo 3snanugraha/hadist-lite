@@ -1,8 +1,11 @@
 import { Tabs } from 'expo-router';
 import { MaterialIcons } from '@expo/vector-icons';
+import { View } from 'react-native';
+import { AdBanner } from '../../components/ads/AdBanner';
 
 export default function TabsLayout() {
   return (
+    <View style={{ flex: 1 }}>
     <Tabs screenOptions={{
       headerStyle: {
         backgroundColor: '#004D40',
@@ -53,5 +56,7 @@ export default function TabsLayout() {
         }}
       />
     </Tabs>
+    <AdBanner />
+    </View>
   );
 }
