@@ -13,6 +13,7 @@ import { useHadith } from '@/hooks/useHadith';
 import { Hadith } from '@/types/hadith';
 import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { ArabicTextViewer } from '@/components/ArabicTextViewer';
 
 export default function ArbainScreen() {
   const router = useRouter();
@@ -78,9 +79,10 @@ export default function ArbainScreen() {
   }, [searchQuery, indexedHadith, hadithList]);
 
   const handleHadithPress = (hadith: Hadith) => {
-    router.push(`/detail-hadist/${hadith.no}`);
+    router.push(`/detail-hadist-arbain/${hadith.no}`);
   };
 
+  // In renderHadithItem
   const renderHadithItem = ({ item, index }: { item: Hadith; index: number }) => (
     <TouchableOpacity 
       style={styles.hadithCard}
@@ -94,12 +96,20 @@ export default function ArbainScreen() {
           <Text style={styles.hadithNumber}>Hadist #{item.no || index + 1}</Text>
           <MaterialIcons name="chevron-right" size={24} color="#004D40" />
         </View>
-        <Text style={styles.title}>{item.judul}</Text>
-        <Text style={styles.arabicText} numberOfLines={2}>{item.arab}</Text>
-        <Text style={styles.translationText} numberOfLines={3}>{item.indo}</Text>
+        <Text style={styles.title} numberOfLines={2}>{item.judul}</Text>
+        <ArabicTextViewer 
+          text={item.arab} 
+          fontSize={22}
+          numberOfLines={2}
+        />
+        <Text style={styles.translationText} numberOfLines={4}>
+          {item.indo}
+        </Text>
       </LinearGradient>
     </TouchableOpacity>
   );
+  
+
 
   const renderFooter = () => {
     if (loadingMore) {
@@ -148,7 +158,7 @@ export default function ArbainScreen() {
         />
         <TouchableOpacity 
           style={styles.randomButton}
-          onPress={() => router.push('/detail-hadist/acak')}
+          onPress={() => router.push('/detail-hadist-arbain/acak')}
         >
           <MaterialIcons name="shuffle" size={24} color="#004D40" />
         </TouchableOpacity>

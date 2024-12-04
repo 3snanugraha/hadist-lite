@@ -13,6 +13,7 @@ import { useHadith } from '@/hooks/useHadith';
 import { Hadith } from '@/types/hadith';
 import { MaterialIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
+import { ArabicTextViewer } from '@/components/ArabicTextViewer';
 
 export default function BulughulScreen() {
   const router = useRouter();
@@ -23,7 +24,8 @@ export default function BulughulScreen() {
   const [indexedHadith, setIndexedHadith] = useState<Hadith[]>([]);
   const [loadingMore, setLoadingMore] = useState(false);
   
-  const ITEMS_PER_PAGE = 20;
+  const ITEMS_PER_PAGE = 10;
+  const TOTAL_HADITHS = 1597; // Total Bulughul Maram hadiths
 
   useEffect(() => {
     loadInitialHadith();
@@ -36,7 +38,7 @@ export default function BulughulScreen() {
   };
 
   const indexAllHadith = async () => {
-    const allHadithPromises = Array.from({ length: 1597 }, (_, i) => 
+    const allHadithPromises = Array.from({ length: TOTAL_HADITHS }, (_, i) => 
       getBulughulHadith(i + 1)
     );
     const results = await Promise.all(allHadithPromises);
@@ -46,7 +48,7 @@ export default function BulughulScreen() {
 
   const loadHadith = async (pageNumber: number) => {
     const startIdx = (pageNumber - 1) * ITEMS_PER_PAGE;
-    const endIdx = Math.min(startIdx + ITEMS_PER_PAGE, 1597);
+    const endIdx = Math.min(startIdx + ITEMS_PER_PAGE, TOTAL_HADITHS);
     
     const hadithPromises = Array.from(
       { length: endIdx - startIdx }, 
@@ -58,7 +60,7 @@ export default function BulughulScreen() {
   };
 
   const loadMore = async () => {
-    if (loadingMore || hadithList.length >= 1597) return;
+    if (loadingMore || hadithList.length >= TOTAL_HADITHS) return;
     
     setLoadingMore(true);
     const nextPage = page + 1;
@@ -78,7 +80,7 @@ export default function BulughulScreen() {
   }, [searchQuery, indexedHadith, hadithList]);
 
   const handleHadithPress = (hadith: Hadith) => {
-    router.push(`/detail-hadist/${hadith.no}`);
+    router.push(`/detail-hadist-bm/${hadith.no}`);
   };
 
   const renderHadithItem = ({ item, index }: { item: Hadith; index: number }) => (
@@ -94,9 +96,15 @@ export default function BulughulScreen() {
           <Text style={styles.hadithNumber}>Hadist #{item.no || index + 1}</Text>
           <MaterialIcons name="chevron-right" size={24} color="#004D40" />
         </View>
-        <Text style={styles.title}>{item.judul}</Text>
-        <Text style={styles.arabicText} numberOfLines={2}>{item.arab}</Text>
-        <Text style={styles.translationText} numberOfLines={3}>{item.indo}</Text>
+        <Text style={styles.title} numberOfLines={2}>{item.judul}</Text>
+        <ArabicTextViewer 
+          text={item.arab} 
+          fontSize={22}
+          numberOfLines={2}
+        />
+        <Text style={styles.translationText} numberOfLines={4}>
+          {item.indo}
+        </Text>
       </LinearGradient>
     </TouchableOpacity>
   );
@@ -106,7 +114,7 @@ export default function BulughulScreen() {
       return <ActivityIndicator size="large" color="#fff" />;
     }
     
-    if (hadithList.length < 1597) {
+    if (hadithList.length < TOTAL_HADITHS) {
       return (
         <TouchableOpacity 
           style={styles.loadMoreButton}
@@ -148,7 +156,7 @@ export default function BulughulScreen() {
         />
         <TouchableOpacity 
           style={styles.randomButton}
-          onPress={() => router.push('/detail-hadist/acak')}
+          onPress={() => router.push('/detail-hadist-bm/acak')}
         >
           <MaterialIcons name="shuffle" size={24} color="#004D40" />
         </TouchableOpacity>
@@ -242,12 +250,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 12,
-  },
-  arabicText: {
-    color: '#004D40',
-    fontSize: 20,
-    marginBottom: 8,
-    textAlign: 'right',
   },
   translationText: {
     color: '#004D40',

@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { useLocalSearchParams, useRouter  } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useHadith } from '@/hooks/useHadith';
 import { Hadith } from '@/types/hadith';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialIcons } from '@expo/vector-icons';
+import { ArabicTextViewer } from '@/components/ArabicTextViewer';
 
 export default function HadithDetail() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
-  const { loading, error, getArbainHadith, getRandomArbainHadith, getRandomBulughulHadith, getBulughulHadith } = useHadith();
+  const { loading, error, getArbainHadith, getRandomArbainHadith } = useHadith();
   const [hadith, setHadith] = useState<Hadith | null>(null);
 
   useEffect(() => {
@@ -21,30 +22,20 @@ export default function HadithDetail() {
     
     let result;
     if (id === 'acak') {
-      // Determine which collection to use based on route or state
-      const isArbain = true; // Add logic to determine collection
-      result = isArbain ? 
-        await getRandomArbainHadith() : 
-        await getRandomBulughulHadith();
+      result = await getRandomArbainHadith();
     } else {
-      // Determine which collection to use based on route or state
-      const isArbain = true; // Add logic to determine collection
-      result = isArbain ? 
-        await getArbainHadith(Number(id)) : 
-        await getBulughulHadith(Number(id));
+      result = await getArbainHadith(Number(id));
     }
     
     if (result) {
       setHadith(result);
     }
   };
-  
-  
 
   if (loading) {
     return (
       <View style={styles.centerContainer}>
-        <Text>Loading hadith...</Text>
+        <Text style={styles.loadingText}>Loading hadith...</Text>
       </View>
     );
   }
@@ -52,7 +43,7 @@ export default function HadithDetail() {
   if (error) {
     return (
       <View style={styles.centerContainer}>
-        <Text>Error: {error}</Text>
+        <Text style={styles.errorText}>Error: {error}</Text>
       </View>
     );
   }
@@ -73,7 +64,11 @@ export default function HadithDetail() {
       >
         <Text style={styles.hadithNumber}>Hadith #{id}</Text>
         <Text style={styles.title}>{hadith.judul}</Text>
-        <Text style={styles.arabicText}>{hadith.arab}</Text>
+        <ArabicTextViewer 
+          text={hadith.arab} 
+          fontSize={24}
+          textAlign="right"
+        />
         <Text style={styles.translationText}>{hadith.indo}</Text>
       </LinearGradient>
     </ScrollView>
@@ -85,6 +80,12 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#004D40',
   },
+  centerContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#004D40',
+  },
   backButton: {
     position: 'relative',
     top: 16,
@@ -93,43 +94,49 @@ const styles = StyleSheet.create({
     marginBottom: 4,
     padding: 8,
   },
-  centerContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  contentContainer: {
-    margin: 16,
-    padding: 16,
-    borderRadius: 12,
-    elevation: 3,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-  },
-  hadithNumber: {
-    color: '#004D40',
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
-  title: {
-    color: '#004D40',
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 16,
-  },
-  arabicText: {
-    color: '#004D40',
-    fontSize: 24,
-    lineHeight: 36,
-    textAlign: 'right',
-    marginBottom: 16,
-  },
-  translationText: {
-    color: '#004D40',
-    fontSize: 16,
-    lineHeight: 24,
-  },
-});
+    // Update contentContainer style
+    contentContainer: {
+      margin: 16,
+      padding: 16,
+      borderRadius: 12,
+      elevation: 3,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+      flex: 1,
+      minHeight: 500,
+    },
+    // Add style for ArabicTextViewer container
+    arabicContainer: {
+      flex: 1,
+      marginVertical: 16,
+      paddingVertical: 16,
+    },
+    hadithNumber: {
+      color: '#004D40',
+      fontSize: 16,
+      fontWeight: 'bold',
+      marginBottom: 8,
+    },
+    title: {
+      color: '#004D40',
+      fontSize: 24,
+      fontWeight: 'bold',
+      marginBottom: 16,
+    },
+    translationText: {
+      color: '#004D40',
+      fontSize: 16,
+      lineHeight: 24,
+      marginTop: 20,
+    },
+    loadingText: {
+      color: '#fff',
+      fontSize: 16,
+    },
+    errorText: {
+      color: '#fff',
+      fontSize: 16,
+    }
+})

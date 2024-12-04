@@ -45,7 +45,13 @@ export function useHadith() {
     try {
       const response = await hadithApi.getBulughulHadith(number);
       if (response.status) {
-        return response.data;
+        // Transform the data to match Hadith interface
+        return {
+          arab: response.data.ar,
+          indo: response.data.id || '',
+          no: response.data.no,
+          judul: `Hadith Bulughul Maram No. ${response.data.no}`
+        };
       }
       throw new Error('Failed to fetch Bulughul hadith');
     } catch (err) {
@@ -56,12 +62,19 @@ export function useHadith() {
     }
   }, []);
 
+
   const getRandomBulughulHadith = useCallback(async () => {
     setLoading(true);
     try {
       const response = await hadithApi.getRandomBulughul();
       if (response.status) {
-        return response.data;
+        // Add this transformation
+        return {
+          arab: response.data.ar,
+          indo: response.data.id || '',
+          no: response.data.no,
+          judul: `Hadith Bulughul Maram No. ${response.data.no}`
+        };
       }
       throw new Error('Failed to fetch random Bulughul hadith');
     } catch (err) {
@@ -71,6 +84,7 @@ export function useHadith() {
       setLoading(false);
     }
   }, []);
+  
 
   const getPerawiList = useCallback(async () => {
     setLoading(true);
