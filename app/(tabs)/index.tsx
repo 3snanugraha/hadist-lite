@@ -24,7 +24,7 @@ export default function Home() {
     },
     {
       title: '9 Perawi Hadits',
-      description: 'Kumpulan hadits dari 9 perawi utama',
+      description: 'Kumpulan hadits dari 9 perawi utama  | Total : 38,102 hadits',
       icon: 'people',
       route: '/perawi',
       gradient: ['#00897B', '#004D40'] as const
@@ -41,7 +41,7 @@ export default function Home() {
           colors={['rgba(0,77,64,0.8)', 'rgba(0,77,64,0.95)'] as const}
           style={styles.headerOverlay}
         >
-          <Text style={styles.title}>Hadist Lengkap</Text>
+          <Text style={styles.title}>Hadits Lengkap</Text>
           <Text style={styles.subtitle}>Kumpulan Hadits Pilihan</Text>
           
           <View style={styles.statsContainer}>

@@ -1,50 +1,53 @@
-# Welcome to your Expo app 👋
+# Aplikasi Hadits
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Aplikasi mobile yang menyediakan berbagai koleksi Hadits lengkap.
 
-## Get started
+## Koleksi yang Tersedia
 
-1. Install dependencies
+### 1. Hadits Arbain Nawawi
+- Total: 42 Hadits
+- Fitur: Pencarian, Hadits Acak, Tampilan Teks Lengkap
+- Navigasi: /arbain
 
-   ```bash
-   npm install
-   ```
+### 2. Bulughul Maram
+- Total: 1.597 Hadits  
+- Fitur: Pencarian, Hadits Acak, Tampilan Teks Lengkap
+- Navigasi: /bulughul
 
-2. Start the app
+### 3. 9 Perawi Utama (38.102 Hadits)
+- Abu Dawud (4.419)
+- Ahmad (4.305) 
+- Bukhari (6.638)
+- Darimi (2.949)
+- Ibnu Majah (4.285)
+- Malik (1.587)
+- Muslim (4.930)
+- Nasai (5.364)
+- Tirmidzi (3.625)
 
-   ```bash
-    npx expo start
-   ```
+## Fitur Utama
+- Tampilan teks Arab dengan pengaturan ukuran font
+- Terjemahan Bahasa Indonesia
+- Pencarian di semua koleksi
+- Pemilihan hadits secara acak
+- Infinite scroll untuk koleksi besar
+- Tampilan UI yang bersih dengan kartu gradien
 
-In the output, you'll find options to open the app in a
+## Integrasi API
+URL Dasar: https://api.myquran.com/v2/hadits
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Struktur Proyek
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
-## Get a fresh project
-
-When you're ready, run:
-
+## Memulai
+1. Install dependensi:
 ```bash
-npm run reset-project
+npm install
+npx expo start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+### Teknologi yang Digunakan
+React Native dengan Expo
+Routing berbasis file
+Linear Gradients untuk UI
+Custom hooks untuk integrasi API

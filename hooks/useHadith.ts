@@ -102,6 +102,39 @@ export function useHadith() {
     }
   }, []);
 
+  // Add this to the existing useHadith hook
+const getHadithByPerawi = useCallback(async (slug: string, number: number) => {
+  setLoading(true);
+  try {
+    const response = await hadithApi.getHadithByPerawi(slug, number);
+    if (response.status) {
+      return response.data;
+    }
+    throw new Error('Failed to fetch hadith');
+  } catch (err) {
+    setError(err instanceof Error ? err.message : 'Unknown error');
+    return null;
+  } finally {
+    setLoading(false);
+  }
+}, []);
+
+const getRandomPerawi = useCallback(async () => {
+  setLoading(true);
+  try {
+    const response = await hadithApi.getRandomPerawi();
+    if (response.status) {
+      return response.data;
+    }
+    throw new Error('Failed to fetch random hadith');
+  } catch (err) {
+    setError(err instanceof Error ? err.message : 'Unknown error');
+    return null;
+  } finally {
+    setLoading(false);
+  }
+}, []);
+
   return {
     loading,
     error,
@@ -109,6 +142,8 @@ export function useHadith() {
     getRandomArbainHadith,
     getBulughulHadith,
     getRandomBulughulHadith,
-    getPerawiList
+    getPerawiList,
+    getHadithByPerawi,
+    getRandomPerawi
   };
 }
